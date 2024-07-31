@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Category";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2">
+            @{
+                await RenderSectionAsync("SideBar",required: false);
+            }
+        </div>
+        <div class="col-10 position-relative">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@await RenderSectionAsync("Scripts", required: false)

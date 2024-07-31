@@ -1,0 +1,292 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BakeryOnline_MVC</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/BakeryOnline_MVC.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        /* Style css Index - HomeController */
+        .home-header-dropdown .nav-link {
+            color:black;
+        }
+
+        .home-header-dropdown .nav-link:hover {
+            color: #c14679;
+            transform:scale(1.1);
+        }
+
+        .banner-text {
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            color: #333;
+        }
+
+        .banner-text h1 {
+            font-size: 6rem;
+            font-weight: normal;
+            font-family: 'Pacifico', cursive;
+            color: #c14679;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1), 0 2px 2px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.2), 0 4px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .banner-text h2 {
+            font-size: 2.5rem;
+            font-family: 'Arial Black', sans-serif; 
+            letter-spacing: 0.5rem;
+            color: #000;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1), 0 2px 2px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.2), 0 4px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .banner-text p {
+            font-size: 1rem;
+            font-family: 'Open Sans', sans-serif;
+            letter-spacing: 0.2rem;
+            line-height: 1.5rem;
+            color: #777;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1), 0 2px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .shop-now-btn {
+            background-color: #c14679;
+            font-family: 'Roboto', sans-serif;
+            font-weight: bold;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 1.5rem 2.5rem;
+            text-transform: uppercase;
+            box-shadow: 0px 1px 2px #b6b1b1e0;
+            transition: all 0.5s;
+        }
+
+        .shop-now-btn:hover {
+            letter-spacing: 2px;
+            transform: scaleY(1.1);
+        }
+
+        .btn-shop-now-hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(0 0 0 / 17%); 
+            opacity: 0;
+            transition: opacity 0.5s; 
+        }
+
+        .btn-shop-now-hover:hover::before {
+            opacity: 0.8; /* Hiện nền đen mờ khi hover */
+        }
+
+        /*                                                              */
+        .title-category {
+            position: relative;
+            display: inline-block;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .title-category::before{
+            content: '';
+            position: absolute;
+            top: 40%;
+            left: -17rem;
+            width: 15rem;
+            height: 1.2rem;
+            background: #c14679;
+            border-radius: 4rem;
+        }
+
+        .title-category::after{
+            content: '';
+            position: absolute;
+            top: 40%;
+            right: -17rem;
+            width: 15rem;
+            height: 1.2rem;
+            background: #c14679;
+            border-radius: 4rem;
+        }
+
+        .effect-title-category::before {
+            content: "";
+            position: absolute;
+            left: -4rem;
+            top: -25%;
+            background-color: white;
+            width: 2.5rem;
+            height: 5rem;
+            border-radius: 50%;
+        }
+
+        .effect-title-category::after {
+            content: "";
+            position: absolute;
+            right: -4rem;
+            top: -25%;
+            background-color: white;
+            width: 2.5rem;
+            height: 5rem;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        #home-header-dropdown-effect:hover .home-header-dropdown-menu {
+            display: block;
+        }
+
+        .home-header-dropdown-menu {
+            display: none;
+            position: absolute;
+            z-index: 1;
+            list-style: none;
+            background-color: white;
+            box-shadow: 0px 2px 3px #3a3737;
+            border-radius: 8px;
+            width: 20rem;
+        }
+
+        .home-header-dropdown-menu .home-header-dropdown-item {
+            display: inline-block;
+            text-decoration: none;
+            width: 100%;
+            height: 30px;
+            color: black;
+        }
+
+        .home-header-dropdown-menu .home-header-dropdown-item:hover {
+            padding-left: 10px;
+            border-radius:5px;
+            box-shadow: 0px 2px 5px #3a3737;
+            color: #c14679;
+            transform: scale(1.05); 
+        }
+        /*            Acion Index -   CategoryController                    */
+         .custom-checkbox input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked {
+            background-color: white;
+            border-color: gray;
+            box-shadow: inset 0px 0px 4px #4a4646d4;
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked::before {
+            content: '\2713'; /* Check mark character */
+            color: gray;
+            position: absolute;
+            left: 4px;
+            top: 0;
+            font-size: 18px;
+            line-height: 20px;
+	   
+        }
+
+        .custom-checkbox label {
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+        .page-number {
+            width: 2rem;
+            background-color: pink;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .page-number:hover {
+            background-color: greenyellow;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container-fluid">
+            <div class="row d-flex justify-content-between p-3" style="box-shadow:-1px 1px 3px #dee2e6">
+                <div class="col-2">
+                    <a asp-action="Index" asp-controller="Home" class="d-block ms-4">
+                        <img src="~/logo.png" alt="Logo Bakery" class="img-fluid" />
+                    </a>
+                </div>
+                <div class="col-3 d-flex align-items-center">
+                    <form class="d-flex mt-2 w-100" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-black">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse ms-4" id="navbarNavDropdown">
+                    <ul class="navbar-nav ms-2 w-100 gap-4">
+                        <li class="nav-item home-header-dropdown">
+                            <a class="nav-link fs-5 text-center" asp-action="Index" asp-controller="Home">Home</a>
+                        </li>
+                        <li id="home-header-dropdown-effect" class="nav-item home-header-dropdown position-relative">
+                            <a class="nav-link fs-5 text-center" asp-action="Index" asp-controller="Category">Category</a>
+                            <ul class="home-header-dropdown-menu p-3">
+                                <li>
+                                    <a class="home-header-dropdown-item" asp-action="Index" asp-controller="Category" asp-route-name="Cakes">Cakes</a>
+                                </li>
+                                <li><a class="home-header-dropdown-item" asp-action="Index" asp-controller="Category" asp-route-name="Desserts">Desserts</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+   <main>
+       @RenderBody()
+   </main>
+   <footer>
+       <hr />
+       <div class="container-fluid mt-4">
+           <div class="row text-center">
+               <div class="col">
+                   <h5>Categores</h5>
+               </div>
+
+                <div class="col">
+                   <h5>Follow Us</h5>
+               </div>
+
+                <div class="col">
+                    <h5>Information</h5>
+                </div>
+
+                <div class="col">
+                    <h5>Terms and Cookies</h5>
+                </div>
+           </div>
+       </div>
+   </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

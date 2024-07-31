@@ -1,0 +1,48 @@
+﻿@model Paging<Product>
+
+@{
+    int productsPerRow = 4;
+    for (int rowIndex = 0; rowIndex < Model.Result.Count; rowIndex += productsPerRow)
+    {
+        <div class="row h-100">
+            @{
+                for (int colIndex = rowIndex; colIndex < rowIndex + productsPerRow && colIndex < Model.Result.Count; colIndex++)
+                {
+                    <div class="col-3 mb-3">
+                       <div class="card me-2 h-100">
+                            <img class="img-fluid card-img-top" src="/@Model.Result[colIndex].Img_Path" alt="@Model.Result[colIndex].Name" style="height: 200px;" />
+                            <div class="card-body">
+                                <p class="text-center">@Model.Result[colIndex].Name </p>
+                                <p class="text-center">@Model.Result[colIndex].Price </p>
+                            </div>
+                            <hr class="m-0"/>
+                            <div class="py-2 px-3">
+                                <div>
+                                    <button class="btn btn-group-sm text-white" style="background-color: #c14679;">Buy Now</button>
+                                </div>
+                            </div>
+                       </div>
+                    </div>
+                }
+            }
+        </div>
+    }
+
+    <div class="row mb-4 mt-3">
+        <div class="col">
+          <div class="d-flex justify-content-center gap-2">
+                @for (int i = 1; i <= Model.TotalPage; i++)
+                {
+                    @if (Model.CurrentPage == i)
+                    {
+                        <span class="page-number d-inline-block text-center rounded-circle" style="opacity: 0.5;">@i</span>
+                    }
+                    else
+                    {
+                        <span class="page-number d-inline-block text-center rounded-circle">@i</span>
+                    }
+                }
+          </div>
+        </div>
+    </div>
+}

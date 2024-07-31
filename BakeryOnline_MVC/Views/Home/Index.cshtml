@@ -1,0 +1,166 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <div class="position-relative mt-3" style="user-select:none">
+        <img src="/Banner.png" alt="Banner Bakery Online" class="img-fluid w-100 rounded-3" />
+        <div class="banner-text">
+            <h1 class="text-header-banner">Delicious</h1>
+            <h2 class="text-sub-banner mb-3 d-flex align-items-center">
+                <span class="me-3" style="border-bottom: 20rem;border-radius:10rem ;background-color: black;height:0.2rem;width:4.5rem;"></span>
+                <span id="text-header-banner" class="d-inline-block me-4" style="height: 3rem;">
+
+                </span>
+
+            </h2>
+            <p>  Cake Cart offers the best <br /> Cakes and sweets for you.</p>
+            <button class="shop-now-btn mt-4 rounded-3 position-relative overflow-hidden"> <span class="btn-shop-now-hover d-inline-block"> Shop Now</span></button>
+        </div>
+    </div>
+
+    <div class="container-fluid mt-5 p-5">
+        <div class="row text-center">
+            <span class="d-inline-block">
+                <span class="title-category">
+                    <span class="effect-title-category">Cakes </span>
+                </span>
+            </span>
+        </div>
+        @{
+            ViewBag.Product = ViewBag.Cakes;
+            await Html.RenderPartialAsync("RenderListProductPartial");
+        }
+    </div>
+
+    <div class="container-fluid mt-5 p-5">
+        <div class="row text-center">
+            <span class="d-inline-block">
+                <span class="title-category">
+                    <span class="effect-title-category">Desserts</span>
+                </span>
+            </span>
+        </div>
+        @{
+            ViewBag.Product = ViewBag.Desserts;
+            await Html.RenderPartialAsync("RenderListProductPartial");
+        }
+    </div>
+
+    <div class="container-fluid my-5">
+        <div class="row mb-5 px-5">
+            <div class="d-flex justify-content-center align-items-center" style="background-color:#c14679; height:5rem;">
+                <h4 class="text-white" style="font-weight: normal;">%  Save up to 40% OFF on your first order </h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="circle-container d-flex justify-content-center" style="height:11rem;">
+                    <div class="circle-border"> </div>
+                    <div class="circle-content">
+                        <span>aaaa</span>
+                    </div>
+                </div>
+                <h5 class="text-center">Expess Delivery</h5>
+                <p class="text-center">We delivery Fast Your Cake</p>
+            </div>
+
+            <div class="col">
+                <div class="circle-container d-flex justify-content-center" style="height:11rem;">
+                    <div class="circle-border"> </div>
+                    <div class="circle-content">
+                        <span>aaaa</span>
+                    </div>
+                </div>
+                <h5 class="text-center">Expess Delivery</h5>
+                <p class="text-center">We delivery Fast Your Cake</p>
+            </div>
+
+            <div class="col">
+                <div class="circle-container d-flex justify-content-center" style="height:11rem;">
+                    <div class="circle-border"> </div>
+                    <div class="circle-content">
+                        <span>aaaa</span>
+                    </div>
+                </div>
+                <h5 class="text-center">Expess Delivery</h5>
+                <p class="text-center">We delivery Fast Your Cake</p>
+            </div>
+
+            <div class="col">
+                <div class="circle-container d-flex justify-content-center" style="height:11rem;">
+                    <div class="circle-border"> </div>
+                    <div class="circle-content">
+                        <span>aaaa</span>
+                    </div>
+                </div>
+                <h5 class="text-center">Expess Delivery</h5>
+                <p class="text-center">We delivery Fast Your Cake</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+  <script>
+        const textElement = document.getElementById('text-header-banner');
+         const text = "Cakes For You";
+        let index = 0;
+        let direction = 1;
+
+        function typeText() {
+            textElement.textContent = text.slice(0, index);
+
+            if (direction === 1 && index < text.length) {
+                index++;
+            } else if (direction === -1 && index > 0) {
+                index--;
+            } else {
+                direction *= -1;
+            }
+        }
+
+        setInterval(typeText, 200);
+
+        //Khi scroll tới 4 cái vòng tròn thì nó mới hiện animation
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const circleBorders = document.querySelectorAll('.circle-border');
+            const classes = ['circle-border1', 'circle-border2', 'circle-border3', 'circle-border4'];
+
+            //Check element el đang có trong khung nhìn của browser không
+            function isElementInViewport(el) {
+                const rect = el.getBoundingClientRect();
+                return (
+                    rect.top >= 0 &&
+                    rect.left >= 0 &&
+                    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+                );
+            }
+
+            function onScroll() {
+                circleBorders.forEach((border, index) => {
+                    if (index < classes.length) {
+                        if (isElementInViewport(border)) {
+                            border.classList.add(classes[index]);
+                        }
+                        else {
+                            border.classList.remove(classes[index]);
+                        }
+                    }
+                    
+                });
+            }
+
+            window.addEventListener('scroll', onScroll);
+            // Trigger the scroll event once to check the initial position of elements
+            onScroll();
+        });
+
+
+    </script>
+}

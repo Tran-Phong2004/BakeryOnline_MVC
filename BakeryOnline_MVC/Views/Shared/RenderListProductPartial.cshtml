@@ -1,0 +1,36 @@
+﻿@{
+     // Truyền vào một collection từ ViewBag (đặt tên là ViewBag.Product)
+
+    var col = 5;                        /* In mỗi lần 5 sản phẩm */
+    var row = (int)Math.Ceiling((double)ViewBag.Product.Count / col);   /* Tổng số dòng */
+
+    for (int i = 0; i < row; i++)
+    {
+        <div class="row mt-5">
+            @{
+                var start = i * col;
+                var end = start + col;
+
+                for (int j = start; j < end; j++)
+                {
+                    if(j < ViewBag.Product.Count)
+                    {
+                        <div class="col">
+                            <div class="card h-100 rounded-3 user-select-none">
+                                <img src="/@ViewBag.Product[j].Img_Path" class="card-img-top img-fluid h-100" />
+                                <div class="card-body">
+                                    <p class="card-title text-center">@ViewBag.Product[j].Name</p>
+                                    <p class="card-text text-center " style="color:#d179a0;">@(ViewBag.Product[j].Price)</p>
+                                </div>
+
+                                <div class="card-footer">
+                                    <button class="btn btn-primary">Buy Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+             }
+        </div>
+    }
+}

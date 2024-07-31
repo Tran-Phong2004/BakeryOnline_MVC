@@ -1,0 +1,104 @@
+﻿@{
+    ViewData["Title"] = "Category";
+    Layout = "~/Views/Shared/_LayoutCategory.cshtml";
+}
+
+@section SideBar {
+    @{
+        for (int index = 0; index < ViewBag.Categories.Count; index++)
+        {
+                                                            <div class="w-100 custom-checkbox">
+                                                                <input type="checkbox" class="category-checkbox" data-category-id="@ViewBag.categories[index].ID" data-category-name="@ViewBag.categories[index].Name" />
+                                                                <label>@ViewBag.categories[index].Name</label>
+                                                            </div>
+        }
+    }
+}
+
+<div class="container-load position-absolute start-50" style="z-index:1;"></div>
+<div id="product-container" class="container-fluid">
+ 
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const productsContainer = document.getElementById('product-container');
+            const load = document.querySelector(".container-load");
+            var checkboxes = document.querySelectorAll('.category-checkbox');
+            var checkedCategoryName = `@ViewBag.IsChecked`;
+            var selectedCategories = [];
+
+            checkboxes.forEach(function (checkbox) {
+
+                if (checkedCategoryName === checkbox.getAttribute('data-category-name')) {
+                    let checkedCategoryId = checkbox.getAttribute('data-category-id')
+                    selectedCategories.push(checkedCategoryId)
+                    checkbox.checked = true;
+
+                    load.classList.add("loader");
+                    fetchProducts(selectedCategories, 1, load, productsContainer);
+                }
+
+                checkbox.addEventListener('change', function () {
+                    selectedCategories = [];
+                    checkboxes.forEach(function (chk) {
+                        if (chk.checked) {
+                            let chkId = chk.getAttribute('data-category-id');
+                            selectedCategories.push(chkId);
+                        }
+                    });
+
+                    load.classList.add("loader");
+                    fetchProducts(selectedCategories, 1, load, productsContainer);
+                });
+            });
+        });
+
+        function fetchProducts(selectedCategories, page, load, productsContainer) {
+            fetch('/Product/GetProductByCategory', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'categoryId=' + encodeURIComponent(selectedCategories) + '&Page=' + page // Gửi dữ liệu form-encoded
+            })
+                .then(response => response.text())
+                .then(html => {
+                    load.classList.remove("loader");
+                    productsContainer.innerHTML = html;
+                    attachPageEvents(); // Gắn sự kiện cho các số trang sau khi nội dung được tải
+                })
+                .catch(error => {
+                    load.classList.remove("loader");
+                    console.error('Error:', error);
+                });
+        }
+
+        function attachPageEvents() {
+            const pageNum = document.querySelectorAll(".page-number");
+            pageNum.forEach(function (page) {
+                page.addEventListener('click', function () {
+                    const pageValue = parseInt(page.textContent);
+                    const checkboxes = document.querySelectorAll('.category-checkbox');
+                    var selectedCategories = [];
+
+                    checkboxes.forEach(function (chk) {
+                        if (chk.checked) {
+                            let id = chk.getAttribute('data-category-id');
+                            selectedCategories.push(id);
+                        }
+                    });
+
+                    const load = document.querySelector(".container-load");
+                    const productsContainer = document.getElementById('product-container');
+
+                    load.classList.add("loader");
+                    fetchProducts(selectedCategories, pageValue, load, productsContainer);
+                });
+            });
+        }
+      
+    </script>
+}
+
