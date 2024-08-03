@@ -1,5 +1,6 @@
-using BakeryOnline_MVC.Models;
+﻿using BakeryOnline_MVC.Models;
 using BakeryOnline_MVC.Repository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 builder.Services.AddScoped<IRepositoryBase<Category>,RepositoryBase<Category>>();
 builder.Services.AddScoped<IRepositoryBase<Product>,RepositoryBase<Product>>();
 builder.Services.AddScoped<UnitOfWork>();
+
+//Services của Identity
+builder.Services.AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,6 +34,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
