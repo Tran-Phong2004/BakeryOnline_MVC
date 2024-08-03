@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Common;
 using System.Diagnostics;
-
+using BakeryOnline_MVC.Filters.ExeptionHandling;
 namespace BakeryOnline_MVC.Controllers
 {
     public class HomeController : Controller
@@ -31,15 +31,10 @@ namespace BakeryOnline_MVC.Controllers
                               select p).AsNoTracking().Include(p => p.Category).Take(10).ToList();
             ViewBag.Cakes = qr;
             ViewBag.Desserts = qrDesserts;
-
-          
-             return View();
-        }
-
-        public IActionResult Privacy()
-        {
             return View();
         }
+
+     
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
