@@ -1,7 +1,9 @@
 ﻿using BakeryOnline_MVC.Areas.Admin.Models;
 using BakeryOnline_MVC.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Configuration;
 
 namespace BakeryOnline_MVC.Areas.Admin.Controllers
 {
@@ -10,11 +12,13 @@ namespace BakeryOnline_MVC.Areas.Admin.Controllers
     {
         UserManager<AppUser> _userManager;
         SignInManager<AppUser> _signInManager;
+        RoleManager<IdentityRole> _roleManager;
         ILogger<AccountController> _logger;
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ILogger<AccountController> logger)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<IdentityRole> roleManager, ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _logger = logger;
         }
 
@@ -38,7 +42,7 @@ namespace BakeryOnline_MVC.Areas.Admin.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt. Please check your username and password");
+                    ModelState.AddModelError(string.Empty, "Please check your username and password");
                 }
             }
             return View();

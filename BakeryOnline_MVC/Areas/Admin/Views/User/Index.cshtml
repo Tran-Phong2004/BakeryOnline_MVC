@@ -1,0 +1,139 @@
+﻿@model UserVM
+@{
+    ViewData["Title"] = "User Manager";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div asp-validation-summary="All" id="ErrorContainer">
+    <p class="text-danger">@TempData["ErrorDeleteRoleUser"]</p>
+    <p class="text-danger">@TempData["ErrorAddRoleUser"]</p>
+</div>
+
+@* <a role="button" class="addRoleBtn btn btn-success">
+    <span class="me-2"> <i class="fas fa-plus"></i> </span>
+    Thêm mới user
+</a> *@
+<table class="table table-hover mt-3">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Paging.Result.Count; i++)
+        {
+            var user = Model.Paging.Result[i];
+            var modalId = $"Modal{i}";
+            var roleList = ViewBag.RoleList; //Danh sách role hiện có
+            <tr>
+                <td>@(i + 1)</td>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td class="d-flex">
+                    <span class="d-inline-block me-5 w-50 flex-shrink-0"> @string.Join(", ", Model.UserRoles[user.UserName]) </span>
+
+                    @* Add role for user*@
+                    <div>
+                        <a role="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#AddRole@(modalId)">
+                            <span class="d-inline-block">
+                                <i class="fas fa-plus-square"></i>
+                            </span>
+                        </a>
+                        <!-- Modal -->
+                        <div class="modal fade" id="AddRole@(modalId)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm role cho <span class="text-warning">@user.UserName</span> </h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form method="post" asp-area="Admin" asp-controller="User" asp-action="AddRoleUser">
+                                        <div class="modal-body">
+                                            <input class="ms-3 mb-4" value="@user" name="userName" type="hidden" />
+                                            @if (roleList != null)
+                                            {
+                                                <label for="roleName" class="mb-2">Chọn role</label>
+                                                <select name="roleName" class="form-control">
+                                                    @foreach (var item in ViewBag.RoleList)
+                                                    {
+                                                        <option value="@item">@item</option>
+                                                    }
+                                                </select>
+                                            }
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @* Delete role for user *@
+                    <div class="ms-2">
+                        <a role="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#DeleteRole@(modalId)">
+                            <span class="d-inline-block">
+                                <i class="fas fa-minus-square"></i>
+                            </span>
+                        </a>
+                        <!-- Modal -->
+                        <div class="modal fade" id="DeleteRole@(modalId)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Xóa role của <span class="text-warning">@user.UserName</span> </h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form method="post" asp-area="Admin" asp-controller="User" asp-action="DeleteRoleUser">
+                                        <div class="modal-body">
+                                            <input class="ms-3 mb-4" value="@user" name="userName" type="hidden" />
+                                            @if (Model.UserRoles[user.UserName] != null)
+                                            {
+                                                <label for="roleName" class="mb-2">Chọn role muốn xóa</label>
+                                                <select name="roleName" class="form-control">
+                                                    <option selected disabled>Danh sách role của user @user.UserName</option>
+                                                    @foreach (var item in Model.UserRoles[user.UserName])
+                                                    {
+                                                        <option value="@item">@item</option>
+                                                    }
+                                                </select>
+                                            }
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+
+                <td>
+                    <a class="btn btn-danger btn-sm" asp-area="Admin" asp-controller="User" asp-action="DeleteUser" asp-route-Id="@user.Id">
+                        <span> <i class="fas fa-trash-alt"></i> </span>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        const errContainer = document.getElementById("ErrorContainer");
+        const style = window.getComputedStyle(errContainer);
+        if (style.display === "block") {
+            setTimeout(() => {
+                errContainer.style.display = "none";
+            }, 2000);
+        }
+    </script>
+}

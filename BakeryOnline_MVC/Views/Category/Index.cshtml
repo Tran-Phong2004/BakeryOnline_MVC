@@ -7,10 +7,10 @@
     @{
         for (int index = 0; index < ViewBag.Categories.Count; index++)
         {
-                                                            <div class="w-100 custom-checkbox">
-                                                                <input type="checkbox" class="category-checkbox" data-category-id="@ViewBag.categories[index].ID" data-category-name="@ViewBag.categories[index].Name" />
-                                                                <label>@ViewBag.categories[index].Name</label>
-                                                            </div>
+            <div class="w-100 custom-checkbox">
+                <input type="checkbox" class="category-checkbox" data-category-id="@ViewBag.categories[index].ID" data-category-name="@ViewBag.categories[index].Name" />
+                <label>@ViewBag.categories[index].Name</label>
+            </div>
         }
     }
 }

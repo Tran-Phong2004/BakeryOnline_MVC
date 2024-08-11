@@ -26,15 +26,25 @@
                         <span asp-validation-for="@Model.Email" class="text-danger"></span>
                     </div>
 
-                    <div class="form-floating mb-3">
-                        <input type="password" class="form-control" asp-for="@Model.Password" placeholder="Password">
-                        <label asp-for="@Model.Password">Password</label>
+                    <div class="mb-3">
+                        <div class="position-relative form-floating">
+                            <input type="password" class="form-control pe-5 password" asp-for="@Model.Password" placeholder="Password">
+                            <span class="position-absolute end-0 top-50 translate-middle icon-eye">
+                                <i class="bi bi-eye-slash"></i>
+                            </span>
+                            <label asp-for="@Model.Password">Password </label>
+                        </div>
                         <span asp-validation-for="@Model.Password" class="text-danger"></span>
                     </div>
 
-                    <div class="form-floating mb-3">
-                        <input type="password" class="form-control" asp-for="@Model.ConfirmPassword" placeholder="ConfirmPassword">
-                        <label asp-for="@Model.ConfirmPassword">Confirm Password</label>
+                    <div class="mb-3">
+                        <div class="position-relative form-floating">
+                            <input type="password" class="form-control pe-5 passwordConfirm" asp-for="@Model.ConfirmPassword" placeholder="ConfirmPassword">
+                            <span class="position-absolute end-0 top-50 translate-middle icon-eye">
+                                <i class="bi bi-eye-slash"></i>
+                            </span>
+                            <label asp-for="@Model.ConfirmPassword">Confirm Password</label>
+                       </div>
                         <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
                     </div>
 

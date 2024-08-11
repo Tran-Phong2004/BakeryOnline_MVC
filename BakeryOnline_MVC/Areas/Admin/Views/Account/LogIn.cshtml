@@ -15,14 +15,19 @@
                   </div>
                   <div class="form-control py-5">
                       <div class="form-floating mb-3">
-                          <input type="text" class="form-control" asp-for="@Model.Username" placeholder="name@example.com" value="@(TempData["UserName"] ?? "")">
+                          <input type="text" class="form-control username" asp-for="@Model.Username" placeholder="name@example.com" value="@(TempData["UserName"] ?? "")">
                           <label asp-for="@Model.Username">Username</label>
                           <span asp-validation-for="@Model.Username" class="text-danger"></span>
                       </div>
 
-                      <div class="form-floating mb-3">
-                          <input type="password" class="form-control" asp-for="@Model.Password" placeholder="Password">
-                          <label asp-for="@Model.Password">Password</label>
+                    <div class="mb-3">
+                        <div class="position-relative form-floating">
+                            <input type="password" class="form-control pe-5 password" asp-for="@Model.Password" placeholder="Password">
+                            <span class="position-absolute end-0 top-50 translate-middle icon-eye">
+                                <i class="bi bi-eye-slash"></i>
+                            </span>
+                            <label asp-for="@Model.Password">Password </label>
+                         </div>
                           <span asp-validation-for="@Model.Password" class="text-danger"></span>
                       </div>
 

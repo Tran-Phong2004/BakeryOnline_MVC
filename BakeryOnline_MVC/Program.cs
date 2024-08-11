@@ -19,6 +19,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 
 builder.Services.AddScoped<IRepositoryBase<Category>,RepositoryBase<Category>>();
 builder.Services.AddScoped<IRepositoryBase<Product>,RepositoryBase<Product>>();
+builder.Services.AddScoped<IRepositoryBase<AppUser>, RepositoryBase<AppUser>>();
 builder.Services.AddScoped<UnitOfWork>();
 
 //Services của Identity

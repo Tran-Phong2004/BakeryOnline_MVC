@@ -1,0 +1,104 @@
+﻿@model RoleVM
+@{
+    ViewData["Title"] = "Role Manager";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<a role="button" class="addRoleBtn btn btn-success">
+    <span class="me-2"> <i class="fas fa-plus"></i> </span>
+    Thêm mới role
+</a>
+
+<div asp-validation-summary="All" class="text-danger errorList">
+    <p class="text-danger">@TempData["DeleteError"]</p>
+</div>
+<form method="post" asp-controller="Role" asp-action="CreateRole" id="newRoleForm">
+    <div class="row mt-3">
+        <div class="col-9 input-group">
+            <div class="mb-3 me-2 col-9 d-flex position-relative">
+                <input type="text" class="form-control" id="roleName" placeholder="Nhập tên role" asp-for="@Model.RoleName">
+                <div class="d-flex position-absolute end-0">
+                    <button type="submit" id="submitRoleBtn" class="btn btn-primary">Tạo</button>
+                    <a role="button" id="cancelRoleBtn" class="btn btn-danger">Hủy</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+<table id="tabe-role" class="table table-hover mt-3">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th scope="col">Tên role</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (ViewBag.RoleList != null)
+        {
+            for (int i = 0; i < ViewBag.RoleList.Count; i++)
+            {
+                var rowClass = (TempData["NewRoleName"] != null && TempData["NewRoleName"] == ViewBag.RoleList[i].Name) ? "bg-info" : "";
+                <tr class="@rowClass" style="transition: all 1.5s;">
+                    <td>@(i+1)</td>
+                    <td>@ViewBag.RoleList[i].Name</td>
+                    <td>
+                        <span class="me-3 btn btn-sm btn-primary" style="cursor: pointer;">
+                            <i class="far fa-edit"></i>
+                        </span>
+                        <span class="btn btn-sm btn-danger" style="cursor: pointer;">
+                            <a class="d-inline-block h-100 w-100 text-white" asp-controller="Role" asp-action="DeleteRole" asp-route-RoleName="@ViewBag.RoleList[i].Name">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </span>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+@section Scripts {
+    <script>
+        document.querySelector('.addRoleBtn').addEventListener('click', () => {
+            const form = document.getElementById('newRoleForm');
+            if (form.style.display == 'none') {
+                form.style.display = 'block';
+
+                document.getElementById('cancelRoleBtn').addEventListener('click',()=> {
+                    form.style.display = 'none';
+                    form.querySelector("input").value = "";
+                })
+            }
+            else {
+                form.style.display = 'none';
+                form.querySelector("input").value = "";
+            }
+        })
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const errContainer = document.querySelector(".errorList");
+            const style = window.getComputedStyle(errContainer);
+            if (style.display === "block") {
+                setTimeout(() => {
+                    errContainer.style.display = "none";
+                }, 2000);
+            }
+        });
+
+        const rowTable = document.querySelectorAll("#tabe-role tr");
+        rowTable.forEach(element => {
+            if (element.classList.contains("bg-info")) {
+                setTimeout(() => {
+                    element.classList.remove("bg-info");
+                }, 2500);
+            }
+        });
+
+    </script>
+}

@@ -1,12 +1,11 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using BakeryOnline_MVC.Models
+﻿@using BakeryOnline_MVC.Models
+@using Microsoft.AspNetCore.Identity
 @inject SignInManager<AppUser> SignInManager
-
-    @* dùng và css trong /View/Shared/_Layoutcs.html*@
+@* dùng và css trong /View/Shared/_Layoutcs.html*@
 
 @if (!User.Identity.IsAuthenticated)
 {
-    <a class="nav-link text-center" style="color:#b6b6b6;" asp-area="Admin" asp-action="LogIn" asp-controller="Account">
+    <a class="nav-link text-center home-header-dropdown-item" asp-area="Admin" asp-action="LogIn" asp-controller="Account">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
         </svg>
@@ -14,9 +13,10 @@
 }
 else
 {
-    <span class="d-inline-block" style="width: 3rem; cursor:pointer;">Hello <span class="text-success fs-4">@User.Identity.Name</span> </span>
+    <span class="d-inline-block home-header-dropdown-item" style="width: 3rem; cursor:pointer;">Hello <span class="text-success fs-4">@User.Identity.Name</span> </span>
 }
 
+@* menu con khi chưa đăng nhập *@
 <ul class="menu-user p-3">
     @if (!SignInManager.IsSignedIn(User))
     {
