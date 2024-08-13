@@ -23,7 +23,7 @@ builder.Services.AddScoped<IRepositoryBase<AppUser>, RepositoryBase<AppUser>>();
 builder.Services.AddScoped<UnitOfWork>();
 
 //Services của Identity
-builder.Services.AddIdentity<AppUser, IdentityRole>()
+builder.Services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.Configure<IdentityOptions>(options =>
 {

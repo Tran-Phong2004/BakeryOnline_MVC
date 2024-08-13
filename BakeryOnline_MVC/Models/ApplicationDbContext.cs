@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BakeryOnline_MVC.Models
 {
-    public class ApplicationDbContext : IdentityDbContext<AppUser>
+    public class ApplicationDbContext : IdentityDbContext<AppUser,AppRole,string>
     {
         public DbSet<Category> Category { get; set; }
         public DbSet<Product> Product { get; set; }

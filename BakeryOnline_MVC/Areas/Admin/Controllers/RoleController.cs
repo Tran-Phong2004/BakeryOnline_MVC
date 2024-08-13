@@ -1,9 +1,11 @@
 ﻿using BakeryOnline_MVC.Areas.Admin.Models;
+using BakeryOnline_MVC.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
+using System.Data;
 
 namespace BakeryOnline_MVC.Areas.Admin.Controllers
 {
@@ -11,8 +13,8 @@ namespace BakeryOnline_MVC.Areas.Admin.Controllers
     [Area("Admin")]
     public class RoleController : Controller
     {
-        RoleManager<IdentityRole> _roleManager;
-        public RoleController(RoleManager<IdentityRole> roleManager)
+        RoleManager<AppRole> _roleManager;
+        public RoleController(RoleManager<AppRole> roleManager)
         {
             _roleManager = roleManager;
         }
@@ -28,7 +30,7 @@ namespace BakeryOnline_MVC.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateRole(RoleVM input)
         {
-            var role = new IdentityRole()
+            var role = new AppRole()
             { 
                 Name = input.RoleName,
             };
@@ -59,6 +61,41 @@ namespace BakeryOnline_MVC.Areas.Admin.Controllers
                 }
             }
             return RedirectToAction("Index", "Role");
+        }
+
+        public async Task<string> SetDefaultRole(string defaultRole) 
+        {
+            var role = await _roleManager.FindByNameAsync(defaultRole);
+            if (role != null) 
+            {
+                role.IsDefaultRole = true;
+                var result = await _roleManager.UpdateAsync(role);
+                if (result.Succeeded) 
+                {
+                    await SetFalse(role);
+                    return "Ok";
+                }
+                else
+                {
+                    return "Failure: " + string.Join(", ",result.Errors.Select(error => error.Description));
+                }
+            }
+            return "Failure : Role Not Found";
+        }
+
+        //Set field IsRoleDefault = false exept 'appRole'
+        private async Task SetFalse(AppRole appRole)
+        {
+            var allRole = await _roleManager.Roles.ToListAsync();
+            for(int i = 0; i < allRole.Count; i++)
+            {
+                var role = allRole[i];
+                if(role.Id !=  appRole.Id)
+                {
+                    role.IsDefaultRole = false;
+                    await _roleManager.UpdateAsync(role);
+                }
+            }
         }
     }
 }

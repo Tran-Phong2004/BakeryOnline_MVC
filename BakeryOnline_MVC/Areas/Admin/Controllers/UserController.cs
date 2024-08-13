@@ -13,9 +13,9 @@ namespace BakeryOnline_MVC.Areas.Admin.Controllers
     public class UserController : Controller
     {
         UserManager<AppUser> _userManager;
-        RoleManager<IdentityRole> _roleManager;
+        RoleManager<AppRole> _roleManager;
         IRepositoryBase<AppUser> _repositoryBase;
-        public UserController(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IRepositoryBase<AppUser> repositoryBase)
+        public UserController(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IRepositoryBase<AppUser> repositoryBase)
         {
             _userManager = userManager;
             _roleManager = roleManager;

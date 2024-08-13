@@ -12,9 +12,9 @@ namespace BakeryOnline_MVC.Areas.Admin.Controllers
     {
         UserManager<AppUser> _userManager;
         SignInManager<AppUser> _signInManager;
-        RoleManager<IdentityRole> _roleManager;
+        RoleManager<AppRole> _roleManager;
         ILogger<AccountController> _logger;
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<IdentityRole> roleManager, ILogger<AccountController> logger)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -69,10 +69,17 @@ namespace BakeryOnline_MVC.Areas.Admin.Controllers
                 {
                     UserName = input.Username,
                     Email = input.Email,
+                    CreationTime = DateTime.UtcNow,
                 };
+
                 var result = await _userManager.CreateAsync(user,input.Password);
                 if (result.Succeeded)
                 {
+                    var roleDefault = GetRoleDefault();
+                    if (roleDefault != null) 
+                    {
+                        await _userManager.AddToRoleAsync(user, roleDefault);
+                    }
                     _logger.LogInformation($"Create user {user.UserName} success!");
                     TempData["UserName"] = user.UserName;
                     return RedirectToAction("LogIn", "Account");
@@ -82,6 +89,19 @@ namespace BakeryOnline_MVC.Areas.Admin.Controllers
                 });
             }
             return View();
+        }
+
+        private string GetRoleDefault()
+        {
+            var allRole = _roleManager.Roles.ToList();
+            for (var i = 0; i < allRole.Count; i++)
+            {
+                if (allRole[i].IsDefaultRole == true)
+                {
+                    return allRole[i].Name;
+                }
+            }
+            return null;
         }
 
         [Route("[controller]/Access-Denied.html")]

@@ -47,6 +47,10 @@
                     <td>@(i+1)</td>
                     <td>@ViewBag.RoleList[i].Name</td>
                     <td>
+                        <span class="me-3">
+                            <input type="radio" value="@ViewBag.RoleList[i].Name" id="defaultRole@(i+1)" name="defaultRole" style="cursor: pointer" @((ViewBag.RoleList[i].IsDefaultRole == true) ? "checked" : "") />
+                            <label class="me-2" for="defaultRole@(i+1)" style="cursor: pointer">Default Role</label>
+                        </span>
                         <span class="me-3 btn btn-sm btn-primary" style="cursor: pointer;">
                             <i class="far fa-edit"></i>
                         </span>
@@ -99,6 +103,24 @@
                 }, 2500);
             }
         });
+
+        document.getElementsByName("defaultRole").forEach(input => {
+            input.addEventListener("change",() => {
+                if (input.checked) {
+                    const roleName = input.value;
+                    fetch(`/Admin/Role/SetDefaultRole?defaultRole=${roleName}`, {
+                        method: "GET"
+                    })
+                    .then(response => response.text)
+                    .then(data => {
+                        
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    })
+                }
+            })
+        })
 
     </script>
 }
