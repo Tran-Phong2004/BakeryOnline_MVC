@@ -19,6 +19,7 @@
             <th>STT</th>
             <th>Username</th>
             <th>Email</th>
+            <th>Creation time (UTC)</th>
             <th>Role</th>
             <th>Action</th>
         </tr>
@@ -28,11 +29,14 @@
         {
             var user = Model.Paging.Result[i];
             var modalId = $"Modal{i}";
+            var itemPerPage = 10;
+            var stt = (i + 1) + (itemPerPage * (Model.Paging.CurrentPage - 1)); // ví dụ:currentPage = 2 thì : stt = (9 + 1) + (10 * (2 - 1)) = 20
             var roleList = ViewBag.RoleList; //Danh sách role hiện có
             <tr>
-                <td>@(i + 1)</td>
+                <td>@stt</td>
                 <td>@user.UserName</td>
                 <td>@user.Email</td>
+                <td>@user.CreationTime</td>
                 <td class="d-flex">
                     <span class="d-inline-block me-5 w-50 flex-shrink-0"> @string.Join(", ", Model.UserRoles[user.UserName]) </span>
 
@@ -125,6 +129,24 @@
         }
     </tbody>
 </table>
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center mt-5">
+        <li class="page-item @(Model.Paging.CurrentPage == 1 ? "disabled" : "")">
+            <a class="page-link" aria-label="Previous" asp-area="Admin" asp-controller="User" asp-action="Index" asp-route-p="@(Model.Paging.CurrentPage - 1)">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        @for (int i = 1; i <= Model.Paging.TotalPage; i++)
+        {
+            <li class="page-item"><a class="page-link @((i == Model.Paging.CurrentPage) ? "active-page" : "")" asp-area="Admin" asp-controller="User" asp-action="Index" asp-route-p="@i">@i</a></li>
+        }
+        <li class="page-item @(Model.Paging.CurrentPage == Model.Paging.TotalPage ? "disabled" : "")">
+            <a class="page-link" aria-label="Next" asp-area="Admin" asp-controller="User" asp-action="Index" asp-route-p="@(Model.Paging.CurrentPage + 1)">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
 
 @section Scripts {
     <script>

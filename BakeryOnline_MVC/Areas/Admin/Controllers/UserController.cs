@@ -22,12 +22,17 @@ namespace BakeryOnline_MVC.Areas.Admin.Controllers
             _repositoryBase = repositoryBase;
         }
         [Route("Admin/[controller]/Management/{p:int?}")]           
-        public async Task<IActionResult> Index(int page = 1)
+        public async Task<IActionResult> Index(int p = 1)
         {
             var pageSize = 10;
+            var page = p;
             var collection = _userManager.Users;
-            var paging = await _repositoryBase.Paging(collection, page, pageSize,filter: null ,orderBy: qr => qr.OrderBy(u => u.UserName));
-
+            var paging = await _repositoryBase.Paging(collection, 
+                                                      page, 
+                                                      pageSize,
+                                                      filter: null ,
+                                                      orderBy: qr => qr.OrderBy(u => u.UserName),
+                                                      include: null);
             var model = new UserVM()
             {
                 Paging = paging
@@ -38,11 +43,11 @@ namespace BakeryOnline_MVC.Areas.Admin.Controllers
                 var roleUser = await _userManager.GetRolesAsync(user);
                 if (roleUser != null)
                 {
-                    model.UserRoles[user.UserName] = roleUser.ToList();
+                    model.UserRoles[user.UserName] = roleUser.OrderBy(r => r).ToList();
                 }
             }
 
-            var roleList = await _roleManager.Roles.ToListAsync();
+            var roleList = await _roleManager.Roles.OrderBy(r => r.Name).ToListAsync();
             ViewBag.RoleList = roleList;
             return View(model);
         }

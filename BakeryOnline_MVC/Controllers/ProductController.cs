@@ -25,7 +25,8 @@ namespace BakeryOnline_MVC.Controllers
 
             var pagingResult = await uow.ProductRepository.Paging(listProduct, Page, pageSize, 
                                                                   filter: CategoryId.Length > 0 ? (p => CategoryId.Contains(p.Category_ID)) : (p => true),
-                                                                  orderBy: qr => qr.OrderBy(product => product.Category_ID).ThenBy(product => product.ID));
+                                                                  orderBy: qr => qr.OrderBy(product => product.Category_ID).ThenBy(product => product.ID),
+                                                                  include: null);
         
             return PartialView("RenderProductByCategoryPartial",pagingResult);
         }

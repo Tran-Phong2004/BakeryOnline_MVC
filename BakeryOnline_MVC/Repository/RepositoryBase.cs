@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Drawing.Printing;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace BakeryOnline_MVC.Repository
@@ -31,14 +32,19 @@ namespace BakeryOnline_MVC.Repository
           appContext.Update(entity);
         }
 
+        public async Task<TEntity> FindByIdAsyn<TKey>(TKey id)
+        {
+            return await dbSet.FindAsync(id);
+        } 
         public IQueryable<TEntity> GetAll()
         {
             return dbSet.AsQueryable();
         }
 
-        public IQueryable<TEntity> Paging(int Page = 1, int PageSize = 4, 
-                                          Expression<Func<TEntity, bool>> filter = null,
-                                          Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
+        public IQueryable<TEntity> Paging(int Page = 1, int PageSize = 4,
+                                  Expression<Func<TEntity, bool>> filter = null,
+                                  Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+                                  Func<IQueryable<TEntity>, IQueryable<TEntity>> include = null)
         {
             IQueryable<TEntity> query = dbSet;
             var page = Page;
@@ -49,9 +55,14 @@ namespace BakeryOnline_MVC.Repository
                 query = query.Where(filter).AsQueryable();
             }
 
-            if(orderBy != null)
+            if (orderBy != null)
             {
                 query = orderBy(query);
+            }
+
+            if (include != null)
+            {
+                query = include(query);
             }
 
             query = query.Skip(pageSize * (page - 1))
@@ -62,7 +73,8 @@ namespace BakeryOnline_MVC.Repository
 
         public async Task<Paging<TEntity>> Paging(IQueryable<TEntity> Collection, int Page, int PageSize,
                                          Expression<Func<TEntity, bool>> filter = null,
-                                         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
+                                         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+                                         Func<IQueryable<TEntity>, IQueryable<TEntity>> include = null)
         {
             var query = Collection;
             if (filter != null)
@@ -82,6 +94,11 @@ namespace BakeryOnline_MVC.Repository
             if (orderBy != null)
             {
                 query = orderBy(query);
+            }
+
+            if (include != null)
+            {
+                query = include(query);
             }
 
             var listProduct = await query.Skip(PageSize * (Page - 1))

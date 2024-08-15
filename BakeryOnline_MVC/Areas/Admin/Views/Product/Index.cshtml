@@ -1,0 +1,176 @@
+﻿@model ProductVM
+@{
+    ViewData["Title"] = "Product Manager";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div role="alert" id="MessProduct">
+    <p class="Message MessageAdd alert alert-success">@TempData["AddSuccees"]</p>
+    <p class="Message MessageAdd alert alert-danger"> @TempData["DeleteSuccess"]</p>
+</div>
+<div asp-validation-summary="All" id="ErrorContainer">
+    <p class="text-danger">@TempData["ErrorUploadProductImg"]</p>
+</div>
+
+<a role="button" class="addRoleBtn btn btn-success" data-bs-toggle="modal" data-bs-target="#AddProduct">
+    <span class="me-2"> <i class="fas fa-plus"></i> </span>
+    Thêm mới product
+</a>
+<!-- Modal -->
+<div class="modal fade" id="AddProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm sản phẩm </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" asp-area="Admin" asp-controller="Product" asp-action="AddProduct" class="form-control" enctype="multipart/form-data" >
+                <div class="modal-body">
+                    <div class="form-floating mb-3">
+                        <input asp-for="@Model.Input.Name" type="text" class="form-control" placeholder="Product Name" />
+                        <label asp-for="@Model.Input.Name" class="form-label">Product Name</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="@Model.Input.Price" type="text" inputmode="numeric" class="form-control" placeholder="Price" />
+                        <label asp-for="@Model.Input.Price" class="form-label me-5 Price">Price <span style="font-size: 13px;">(USD)</span></label>
+                        <p id="PriceErrMessage" class="text-danger my-2"></p>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="@Model.Input.Stock" type="text" class="form-control" placeholder="Stock" />
+                        <label asp-for="@Model.Input.Stock" class="form-label">Stock</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="@Model.Input.Description" type="text" class="form-control" placeholder="Description" />
+                        <label asp-for="@Model.Input.Description" class="form-label">Description</label>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="@Model.Input.ImgFile" class="form-label">Image Path</label>
+                        <input asp-for="@Model.Input.ImgFile" class="form-control" type="file">
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="@Model.Input.Category_Id" class="mb-2 form-label">Choose category</label>
+                        <select asp-for="@Model.Input.Category_Id" class="form-control">
+                            @for (var i = 0; i < ViewBag.CategoryList.Count; i++)
+                            {
+                                <option value="@ViewBag.CategoryList[i].ID">@ViewBag.CategoryList[i].Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<table class="table table-hover mt-3">
+    <thead>
+        <tr>
+            <th class="text-center">STT</th>
+            <th class="text-center">Name</th>
+            <th class="text-center">Price</th>
+            <th class="text-center">Stock</th>
+            <th class="text-center">Category</th>
+            <th class="text-center">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Paging.Result.Count; i++)
+        {
+            var product = Model.Paging.Result[i];
+            var itemPerPage = 10; 
+            var stt = (i + 1) + (itemPerPage * (Model.Paging.CurrentPage - 1)); // ví dụ:currentPage = 2 thì : stt = (9 + 1) + (10 * (2 - 1)) = 20
+            <tr>
+                <td class="text-center align-middle">@stt</td>
+                <td class="w-25">
+                   <div class="d-flex align-items-center">
+                        <span class="d-inline-block me-4">  <img src="/@product.Img_Path" alt="Image Product @product.Name" style="width: 5rem; height: 5rem" /></span>
+                        <span class="text-truncate"> @product.Name</span>
+                   </div>
+                 </td>
+                <td class="text-center align-middle">
+                    <span class="ms-3">@product.Price</span>
+                </td>
+                <td class="text-center align-middle">
+                    <span class="ms-3">@product.Stock_Quantity</span>
+                </td>
+                <td class="text-center align-middle">
+                    <span>@product.Category.Name</span>
+                </td>
+                <td class="text-center align-middle">
+                    <a class="btn btn-danger btn-sm" asp-area="Admin" asp-controller="Product" asp-action="DeleteProduct" asp-route-Id="@product.ID">
+                        <span> <i class="fas fa-trash-alt"></i> </span>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center mt-5">
+        <li class="page-item @(Model.Paging.CurrentPage == 1 ? "disabled" : "")">
+            <a class="page-link" aria-label="Previous" asp-area="Admin" asp-controller="Product" asp-action="Index" asp-route-page="@(Model.Paging.CurrentPage - 1)">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        @for (int i = 1; i <= Model.Paging.TotalPage; i++)
+        {
+            <li class="page-item"><a class="page-link @((i == Model.Paging.CurrentPage) ? "active-page" : "")" asp-area="Admin" asp-controller="Product" asp-action="Index" asp-route-page="@i">@i</a></li>
+        }
+        <li class="page-item @(Model.Paging.CurrentPage == Model.Paging.TotalPage ? "disabled" : "")">
+            <a class="page-link" aria-label="Next" asp-area="Admin" asp-controller="Product" asp-action="Index" asp-route-page="@(Model.Paging.CurrentPage + 1)">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+@section Scripts {
+    <script>
+        const errContainer = document.getElementById("ErrorContainer");
+        const style = window.getComputedStyle(errContainer);
+        if (style.display === "block") {
+            setTimeout(() => {
+                errContainer.style.display = "none";
+            }, 2000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var messProduct = document.getElementById('MessProduct');
+            var arrMess = messProduct.querySelectorAll('.Message');
+
+            // Lặp qua từng phần tử .Message
+            arrMess.forEach(element => {
+                var tempDataContent = element.textContent.trim();
+                if (tempDataContent.length > 0) {
+                    messProduct.style.display = 'block';
+                    element.style.display = 'block';
+                    // Tùy chọn: Ẩn phần tử sau một khoảng thời gian nhất định
+                    setTimeout(function () {
+                        messProduct.style.display = 'none';
+                        element.style.display = 'block';
+                    }, 2500); // Ẩn sau 2.5 giây, có thể điều chỉnh thời gian theo nhu cầu
+                }
+            });
+        });
+
+
+
+        document.querySelector('.Price').addEventListener('input', function (event) {
+            var input = event.target;
+            var value = input.value;
+            const containerErrMessage = document.getElementById('PriceErrMessage');
+
+            // Biểu thức chính quy để kiểm tra số hợp lệ chỉ với dấu chấm
+            var regex = /^\d+(\.\d{1,10})?$/;
+            if (!regex.test(value) || value.includes(',')) {
+                containerErrMessage.textContent = 'Vui lòng nhập số hợp lệ, không sử dụng dấu phẩy.';
+            } else {
+                containerErrMessage.textContent = '';
+            }
+        });
+
+    </script>
+}

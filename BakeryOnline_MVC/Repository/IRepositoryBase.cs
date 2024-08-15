@@ -10,15 +10,18 @@ namespace BakeryOnline_MVC.Repository
         void AddEntity(TEntity entity);
         void UpdateEntity(TEntity entity);
         void DeleteEntity(TEntity entity);
+        Task<TEntity> FindByIdAsyn<T>(T id);
         IQueryable<TEntity> GetAll();
         IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy);
         IQueryable<TEntity> Filter(Expression<Func<TEntity, bool>> filter);
         IQueryable<TEntity> Sort(Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy);
         IQueryable<TEntity> Paging(int Page, int PageSize,
                                           Expression<Func<TEntity, bool>> filter,
-                                          Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy);
+                                          Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy,
+                                           Func<IQueryable<TEntity>, IQueryable<TEntity>> include);
         Task<Paging<TEntity>> Paging(IQueryable<TEntity> Collection, int Page, int PageSize,
                                    Expression<Func<TEntity, bool>> filter,
-                                   Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy);
+                                   Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy,
+                                   Func<IQueryable<TEntity>, IQueryable<TEntity>> include);
     }  
 }
